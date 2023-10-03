@@ -3,76 +3,55 @@ Helm charts for the Sdcore deployment. This contains both control plane and user
 
 # Testing sd-core-helm-charts locally
 
-1. Clone the repo 
-```
-git clone https://github.com/NgKore47/sdcore-helm-charts
-```
-> **Note:** See the git diff [here](./patch/sdcore-helm-charts.patch)
-
-
-2. Make sure that the `sd-core-helm-charts` folder is present at this path `/home/ubuntu/core/sd-core-helm-charts`
-
-3. Make sure to follow [this](./Pulling_private_images_using_Secrets.md) readme for `Pulling private docker images using Secrets`
-
-4. Build helm dependency
-
+1. Clone this repo using:
 ```bash
-cd cord/sdcore-helm-charts/sdcore-helm-charts/
-helm dependency build   # or [helm dep update] to Update Helm dependencies
+git clone git clone https://github.com/NgKore47/sdcore-helm-charts
 ```
 
-
-5. Clone Aether-in-a-Box
-
+2. Make sure that the `cord` folder is present at this path `/home/ubuntu/cord`
 ```bash
-cd ~
-git clone "https://gerrit.opencord.org/aether-in-a-box"
-cd ~/aether-in-a-box
-```
-###  Method 1
-
-6. Use this [sd-core-5g-values.yaml](./sd-core-5g-values.yaml) file. 
-
-> **Note:** You can also see the difference between this `sd-core-5g-values.yaml` and the default one [here](./patch/aether-in-a-box.patch)
-
-7. To install the 5G SD-CORE from the local charts:
-
-```bash
-make 5g-test
+cp -r ~/sdcore-helm-charts/cord ~/
 ```
 
-8. To verify the installation:
-
+3. Clone SD-Core repo using:
 ```bash
-kubectl get pods -n omec 
-```
-
-###  Method 2
-
-6. Prepare a kubernetes node to run 5g-core
-
-```bash
+git clone https://github.com/NgKore47/SD-Core.git
+cd ~/SD-Core
+rm sd-core-5g-values.yaml
+cp ~/sdcore-helm-charts/sd-core-5g-values.yaml .
+# Perpare you k8s clsuter
 make node-prep
 ```
 
-7.  Install 5G using SD-Core umbrella helm chart:
+> **NOTE:** You can see the changes of `sd-core-5g-values.yaml` [here](./patch/sd-core-5g-values.patch)
 
-The following command will deploy the SD-Core helm chart with release name sdcore-5g in the sdcore-5g namespace.
+4. Pulling private images using Secrets
 
+- Create kubernetes secrets using command line
 ```bash
-cd cord/sdcore-helm-charts/sdcore-helm-charts/
-helm install -n sdcore-5g --create-namespace -f values.yaml sdcore-5g  ~/cord/sdcore-helm-charts/sdcore-helm-charts
+kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=ngkore --docker-password=dckr_pat_3aEGHh5fOR7GYqCc9gB0_rvt5aw --docker-email=ngkore47@gmail.com
 ```
 
-8. To verify the installation:
+- After creating secret, you can check [private-docker-images.yml](./private-docker-images.yml) which uses private images:
+
+- Create a pod which pull private images:
 
 ```bash
-xxxx@node:~$ helm -n sdcore-5g ls
-NAME        NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
-sdcore-5g   sdcore-5g       1               2022-03-05 16:25:32.338495035 -0700 MST deployed        sd-core-0.13.2
-xxxx@node:~$
+kubectl create -f ~/sdcore-helm-charts/private-docker-images.yml
+```
+> **Note:** After this step, wait for a few minutes to pull the private images
 
-xxxx@node:~$ kubectl get pods -n sdcore-5g
+5. Deploy 5g-core
+```bash
+ENABLE_GNBSIM=false DATA_IFACE=enp101s0f1 CHARTS=local make 5g-core
+```
+
+> **NOTE:** Here we are using local helm charts by specifying `CHARTS=local` in the above cmd. Even if we don't specify anything i.e remove `CHARTS=local` from above line, then also it will deploy 5g-core using local hekm charts. Also change `DATA_IFACE` according to your system.
+
+6. Verify the installation:
+
+```txt
+xxxx@node:~$ kubectl get pods -n omec
 NAME                          READY   STATUS    RESTARTS   AGE
 amf-6cddb6ff5-g5kwp           1/1     Running   0          8d
 ausf-64fb5c5df5-g9xps         1/1     Running   0          8d
@@ -94,3 +73,4 @@ webui-8cfb9659c-hqfp9         1/1     Running   0          8d
 xxxx@node:~$
 ```
 
+7. Refee the file to test with SDR [here]()
