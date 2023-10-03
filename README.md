@@ -10,6 +10,7 @@ git clone git clone https://github.com/NgKore47/sdcore-helm-charts
 
 2. Make sure that the `cord` folder is present at this path `/home/ubuntu/cord`
 ```bash
+tar -xvzf ~/sdcore-helm-charts/cord.tar
 cp -r ~/sdcore-helm-charts/cord ~/
 ```
 
