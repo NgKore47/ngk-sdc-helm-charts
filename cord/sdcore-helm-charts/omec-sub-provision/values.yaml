@@ -5,8 +5,8 @@
 images:
   repository: "" #default docker hub
   tags:
-    init: omecproject/pod-init:1.0.0
-    simapp: omecproject/simapp:main-a4f741a
+    init: ngkore/ngk-pod-init:1.0
+    simapp: ngkore/ngk-simapp:1.0
   pullPolicy: IfNotPresent
 
 resources:
