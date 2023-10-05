@@ -73,4 +73,4 @@ webui-8cfb9659c-hqfp9         1/1     Running   0          8d
 xxxx@node:~$
 ```
 
-7. Refee the file to test with SDR [here]()
+7. Refer this file to test with SDR [here](https://github.com/NgKore47/SD-Core-DPDK/blob/NgKore-sdc-dpdk-v1.0/usrp_conf/sd-core-dpdk-n78-b210.conf)
