@@ -5,11 +5,12 @@ Helm charts for the Sdcore deployment. This contains both control plane and user
 
 1. Clone this repo using:
 ```bash
-git clone git clone https://github.com/NgKore47/sdcore-helm-charts
+git clone https://github.com/NgKore47/sdcore-helm-charts
 ```
 
-2. Make sure that the `cord` folder is present at this path `/home/ubuntu/cord`
+2. Extract the `cord` folder at home i.e `/home/ubuntu/`
 ```bash
+cd ~/
 tar -xvzf ~/sdcore-helm-charts/cord.tar
 ```
 
@@ -19,7 +20,12 @@ git clone https://github.com/NgKore47/SD-Core.git
 cd ~/SD-Core
 rm sd-core-5g-values.yaml
 cp ~/sdcore-helm-charts/sd-core-5g-values.yaml .
-# Perpare you k8s clsuter
+
+# Configure the external IP of ngap in sd-core-5g-values.yaml
+vim sd-core-5g-values.yaml
+
+# Prepare your k8s clsuter
+sudo apt install make
 make node-prep
 ```
 
@@ -43,7 +49,7 @@ kubectl create -f ~/sdcore-helm-charts/private-docker-images.yml
 
 5. Deploy 5g-core
 ```bash
-ENABLE_GNBSIM=false DATA_IFACE=enp101s0f1 CHARTS=local make 5g-core
+ENABLE_GNBSIM=false DATA_IFACE=<iface_ip> CHARTS=local make 5g-core
 ```
 
 > **NOTE:** Here we are using local helm charts by specifying `CHARTS=local` in the above cmd. Even if we don't specify anything i.e remove `CHARTS=local` from above line, then also it will deploy 5g-core using local hekm charts. Also change `DATA_IFACE` according to your system.
@@ -73,4 +79,4 @@ webui-8cfb9659c-hqfp9         1/1     Running   0          8d
 xxxx@node:~$
 ```
 
-7. Refee the file to test with SDR [here]()
+7. Refer this file to test with SDR [here](https://github.com/NgKore47/SD-Core-DPDK/blob/NgKore-sdc-dpdk-v1.0/usrp_conf/sd-core-dpdk-n78-b210.conf)
