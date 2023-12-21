@@ -161,6 +161,7 @@ index d4e145c..3ba674c 100644
 -    #  pfcpiface: <pfcp image tag>
 +    repository: "" #"registry.opennetworking.org/docker.io/"
 +    tags:
++      tools: busybox:stable
 +      bess: "ngkore/ngk-upf-epc-bess:1.0"
 +      pfcpiface: "ngkore/ngk-upf-epc-pfcpiface:1.0"
 +
