@@ -54,7 +54,13 @@ ENABLE_GNBSIM=false DATA_IFACE=<iface_ip> CHARTS=local make 5g-core
 
 > **NOTE:** Here we are using local helm charts by specifying `CHARTS=local` in the above cmd. Even if we don't specify anything i.e remove `CHARTS=local` from above line, then also it will deploy 5g-core using local hekm charts. Also change `DATA_IFACE` according to your system.
 
-6. Verify the installation:
+6. After all the pods are up and running, run the following command on your Sd-Core Server:
+```bash
+sudo iptables -t nat -A POSTROUTING -o eno1 -j MASQUERADE
+```
+> **_NOTE:_** `eno1` is the local IP of the Server
+
+7. Verify the installation:
 
 ```txt
 xxxx@node:~$ kubectl get pods -n omec
@@ -79,4 +85,12 @@ webui-8cfb9659c-hqfp9         1/1     Running   0          8d
 xxxx@node:~$
 ```
 
-7. Refer this file to test with SDR [here](https://github.com/NgKore47/SD-Core-DPDK/blob/NgKore-sdc-dpdk-v1.0/usrp_conf/sd-core-dpdk-n78-b210.conf)
+<hr>
+
+### Testing with gNB:
+
+- Refer this file to test with **SDR(USRP B210)** [here](https://github.com/NgKore47/SD-Core-DPDK/blob/NgKore-sdc-dpdk-v1.0/usrp_conf/sd-core-dpdk-n78-b210.conf)
+
+Or
+
+- Refer this file to test with **External Radio(Liteon)** [here](https://github.com/NgKore47/Disaggregated_RAN_Core/blob/SD-Core-Disaggregated/mwc_20899_newfhi_E_3450.conf)
